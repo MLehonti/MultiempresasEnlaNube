@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             RolyPermisos::class,
-            RubrosTableSeeder::class
+            RubrosTableSeeder::class,
+            CuentasSeeder::class
 
         ]);
 
