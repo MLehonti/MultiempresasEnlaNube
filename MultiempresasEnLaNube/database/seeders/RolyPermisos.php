@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -14,21 +13,15 @@ class RolyPermisos extends Seeder
      */
     public function run(): void
     {
-        $role1 = Role::create(['name'=>'admin']);
-        $role2 = Role::create(['name'=>'cliente']);
+        // Verificar si el rol ya existe antes de crearlo
+        $role1 = Role::firstOrCreate(['name' => 'admin']);
+        $role2 = Role::firstOrCreate(['name' => 'cliente']);
 
+        // Permisos para el rol administrador
+        Permission::firstOrCreate(['name' => 'users.index'])->syncRoles($role1);
+        Permission::firstOrCreate(['name' => 'users.destroy'])->syncRoles($role1);
+        Permission::firstOrCreate(['name' => 'empresas.index'])->syncRoles($role1);
 
-
-        //permisos para el rol adminitrador
-        Permission::create(['name'=>'users.index'])->syncRoles($role1);
-        Permission::create(['name'=>'users.destroy'])->syncRoles($role1);
-        Permission::create(['name'=>'empresas.index'])->syncRoles(($role1));
-
-        //Permission::create(['name'=>'users.edit'])->syncRoles($role1);
-        
-    
-
-
-
+        // Puedes agregar más permisos si es necesario
     }
 }

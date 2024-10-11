@@ -6,28 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-     /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('empresas', function (Blueprint $table) {
-            $table->foreignId('rubro_id')->constrained('rubros')->onDelete('cascade');
-        });
-    }
+    //  /**
+    //  * Run the migrations.
+    //  *
+    //  * @return void
+    //  */
+    // public function up()
+    // {
+    //     Schema::table('empresas', function (Blueprint $table) {
+    //         $table->foreignId('rubro_id')->constrained('rubros')->onDelete('cascade');
+    //     });
+    // }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('empresas', function (Blueprint $table) {
-            $table->dropForeign(['rubro_id']);
-            $table->dropColumn('rubro_id');
-        });
-    }
+    // /**
+    //  * Reverse the migrations.
+    //  *
+    //  * @return void
+    //  */
+    // public function down()
+    // {
+    //     Schema::table('empresas', function (Blueprint $table) {
+    //         $table->dropForeign(['rubro_id']);
+    //         $table->dropColumn('rubro_id');
+    //     });
+    // }
 };
