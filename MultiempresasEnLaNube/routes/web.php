@@ -6,6 +6,7 @@ use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\BalanceAperturaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PlanCuentasController;
 
 
 
@@ -55,6 +56,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/balance/store', [BalanceAperturaController::class, 'store'])->name('balance.store');
     Route::get('/empresa/{empresa_id}/balance/show', [BalanceAperturaController::class, 'show'])->name('balance.show');
 
+
+    //rutas oara el plan
+
+    Route::get('/plan-cuentas', [PlanCuentasController::class, 'index'])->name('plan-cuentas.index');
+    Route::get('/plan-cuentas/create', [PlanCuentasController::class, 'create'])->name('plan-cuentas.create');
+    Route::post('/plan-cuentas/store', [PlanCuentasController::class, 'store'])->name('plan-cuentas.store');
 });
 
 require __DIR__.'/auth.php';

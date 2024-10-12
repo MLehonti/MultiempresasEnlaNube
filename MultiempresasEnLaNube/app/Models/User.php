@@ -46,7 +46,7 @@ class User extends Authenticatable
         ];
     }
 
-    //realcion con la tabla empresas, un usuario crea un empresa y el id 
+    //realcion con la tabla empresas, un usuario crea un empresa y el id
     //del usuario para a la tabla empresa
     public function empresa()
     {

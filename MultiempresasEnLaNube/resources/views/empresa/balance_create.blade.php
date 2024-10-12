@@ -28,7 +28,7 @@
                                 <div class="flex">
                                     <!-- Campo oculto para enviar cuenta_id -->
                                     <input type="hidden" name="detalles[{{ $cuenta->id }}][cuenta_id]" value="{{ $cuenta->id }}">
-                                    
+
                                     <!-- Campos de Debe y Haber -->
                                     <input type="number" step="0.01" name="detalles[{{ $cuenta->id }}][debe]" placeholder="Debe" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
                                     <input type="number" step="0.01" name="detalles[{{ $cuenta->id }}][haber]" placeholder="Haber" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
