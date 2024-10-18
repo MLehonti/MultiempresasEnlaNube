@@ -7,9 +7,7 @@ use App\Http\Controllers\BalanceAperturaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PlanCuentasController;
-
-
-
+use App\Http\Controllers\SubscriptionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +19,12 @@ Route::get('/dashboard', function () {
 
 
 
+Route::get('/precio', [SubscriptionController::class, 'index'])->name('subscription.index');
+Route::get('/registrar', [SubscriptionController::class, 'registrar'])->name('subscription.registrar');
+Route::post('/storeuser', [SubscriptionController::class, 'storeuser'])->name('subscription.storeuser');
+Route::get('/pagar', [SubscriptionController::class, 'pagar'])->name('subscription.pagar');
+Route::post('/create-payment', [SubscriptionController::class, 'createPayment'])->name('subscription.payment');
+Route::get('/list', [SubscriptionController::class, 'listPayments'])->name('subscription.list');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
