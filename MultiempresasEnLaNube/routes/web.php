@@ -18,6 +18,22 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
+// ruta  para exportar pdf de usuario
+Route::get('/users/export-pdf', [UserController::class, 'exportPdf'])->name('users.export.pdf');
+
+//ruta para exportar exel de usuario
+Route::get('/users/export-excel', [UserController::class, 'exportExcel'])->name('users.export.excel');
+
+// ruta  para exportar pdf de empresa
+Route::get('/empresas/export-pdf', [EmpresaController::class, 'exportPdf'])->name('empresas.export.pdf');
+
+//ruta para descargar el exel
+Route::get('/empresas/export/excel', [EmpresaController::class, 'exportExcel'])->name('empresas.export.excel');
+
+
+
+
+//todas estas 6 rutas es para subscripciion y metodos de pago
 
 Route::get('/precio', [SubscriptionController::class, 'index'])->name('subscription.index');
 Route::get('/registrar', [SubscriptionController::class, 'registrar'])->name('subscription.registrar');

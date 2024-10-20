@@ -7,21 +7,71 @@ use App\Models\Rubro;
 use App\Models\Empresa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class EmpresaController extends Controller
 {
 
 
+    public function exportExcel()
+    {
+        // Obtener todas las empresas de la base de datos
+        $empresas = Empresa::with('rubro', 'user')->get();
 
-     // Método para mostrar todas las empresas
-     public function index()
-     {
-         // Obtener todas las empresas del sistema
-         $empresas = Empresa::with('rubro', 'user')->get();
- 
-         // Retornar la vista con las empresas
-         return view('empresa.index', compact('empresas'));
-     }
+        // Crear una nueva hoja de cálculo
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Agregar encabezados
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Nombre');
+        $sheet->setCellValue('C1', 'Rubro');
+        $sheet->setCellValue('D1', 'Propietario');
+
+        // Agregar datos de empresas
+        $row = 2;
+        foreach ($empresas as $empresa) {
+            $sheet->setCellValue('A' . $row, $empresa->id);
+            $sheet->setCellValue('B' . $row, $empresa->nombre);
+            $sheet->setCellValue('C' . $row, $empresa->rubro->nombre);
+            $sheet->setCellValue('D' . $row, $empresa->user->name);
+            $row++;
+        }
+
+        // Crear el archivo Excel y guardarlo en la respuesta para descargar
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'lista_empresas.xlsx';
+        $temp_file = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($temp_file);
+
+        return response()->download($temp_file, $fileName)->deleteFileAfterSend(true);
+    }
+
+
+    public function exportPdf()
+    {
+        // Obtener todas las empresas con sus relaciones necesarias
+        $empresas = Empresa::with('rubro', 'user')->get();
+
+        // Generar el PDF usando una vista
+        $pdf = PDF::loadView('empresa.pdf', compact('empresas'));
+
+        // Descargar el PDF generado
+        return $pdf->download('lista_empresas.pdf');
+    }
+
+
+    // Método para mostrar todas las empresas
+    public function index()
+    {
+        // Obtener todas las empresas del sistema
+        $empresas = Empresa::with('rubro', 'user')->get();
+
+        // Retornar la vista con las empresas
+        return view('empresa.index', compact('empresas'));
+    }
 
 
     public function create()
@@ -117,4 +167,3 @@ class EmpresaController extends Controller
         }
     }
 }
-

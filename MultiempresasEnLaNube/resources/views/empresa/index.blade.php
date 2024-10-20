@@ -10,8 +10,18 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+                <!-- Botones para descargar PDF y Excel -->
+                <div class="text-center mb-4">
+                    <a href="{{ route('empresas.export.pdf') }}" style="background-color: #3490dc; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; margin-right: 10px;">
+                        Descargar PDF
+                    </a>
+                    <a href="{{ route('empresas.export.excel') }}" style="background-color: #38c172; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none;">
+                        Descargar Excel
+                    </a>
+                </div>
+
                 <!-- Tabla para mostrar todas las empresas ocupando el 100% de la tarjeta -->
-                <table class="w-full bg-white border"> <!-- Cambié min-w-full a w-full para ocupar todo el ancho -->
+                <table class="w-full bg-white border">
                     <thead>
                         <tr>
                             <th class="py-2 px-4 border">ID</th>
