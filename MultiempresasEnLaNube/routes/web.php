@@ -8,10 +8,15 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PlanCuentasController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CuentaController;
+
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -77,11 +82,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/empresa/{empresa_id}/balance/show', [BalanceAperturaController::class, 'show'])->name('balance.show');
 
 
-    //rutas oara el plan
+    //rutas Rara el plan de cuentas
 
     Route::get('/plan-cuentas', [PlanCuentasController::class, 'index'])->name('plan-cuentas.index');
     Route::get('/plan-cuentas/create', [PlanCuentasController::class, 'create'])->name('plan-cuentas.create');
     Route::post('/plan-cuentas/store', [PlanCuentasController::class, 'store'])->name('plan-cuentas.store');
+
+
+    //rutas para las cuentas
+    Route::get('/cuentas', [CuentaController::class, 'index'])->name('cuentas.index');
+    Route::post('/cuentas', [CuentaController::class, 'store'])->name('cuentas.store');
+    Route::put('/cuentas/{id}', [CuentaController::class, 'update'])->name('cuentas.update');
+    Route::get('/cuentas/{id}', [CuentaController::class, 'show']);
+    Route::delete('/cuentas/{id}', [CuentaController::class, 'destroy'])->name('cuentas.destroy');
 });
 
+
+
+
+//RUTAS PARA USAR EN FLUTTER
+Route::get('/loginjson', [AuthController::class, 'loginjson']);
 require __DIR__.'/auth.php';

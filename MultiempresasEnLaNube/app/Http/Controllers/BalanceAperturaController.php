@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Log; // Asegúrate de importar Log
 
 class BalanceAperturaController extends Controller
 {
+
+
     public function create($empresa_id)
     {
         $empresa = Empresa::findOrFail($empresa_id);
@@ -21,9 +23,20 @@ class BalanceAperturaController extends Controller
             abort(403, 'No tienes permiso para ver esta empresa.');
         }
 
-        $cuentas = Cuenta::all();
+        // Obtener el plan de cuentas de la empresa
+        $planCuenta = $empresa->planCuenta()->with('detalles.cuenta')->first();
+
+        if (!$planCuenta) {
+            // Si no existe un plan de cuentas para la empresa, redirigir o mostrar un error
+            abort(404, 'No se ha creado un plan de cuentas para esta empresa.');
+        }
+
+        // Obtener las cuentas que están en el plan de cuentas de la empresa
+        $cuentas = $planCuenta->detalles->pluck('cuenta'); // Obtener las cuentas desde los detalles del plan de cuentas
+
         return view('empresa.balance_create', compact('empresa', 'cuentas'));
     }
+
  
 
 
@@ -75,6 +88,27 @@ class BalanceAperturaController extends Controller
     }
 
 
+    // public function show($empresa_id)
+    // {
+    //     // Verifica que la empresa pertenezca al usuario autenticado
+    //     $empresa = Empresa::where('id', $empresa_id)->where('user_id', Auth::user()->id)->firstOrFail();
+
+    //     // Cargar el balance con los detalles y las cuentas asociadas utilizando with
+    //     $balance = BalanceApertura::where('empresa_id', $empresa->id)
+    //                 ->with(['detalles.cuenta']) // Cargar la relación 'detalles' y 'cuenta' en una sola consulta
+    //                 ->first();
+
+    //     // Verificar si la relación 'cuenta' está cargada correctamente
+    //     foreach ($balance->detalles as $detalle) {
+    //         if (!$detalle->relationLoaded('cuenta')) {
+    //             Log::error('Relación cuenta no cargada para detalle con id: ' . $detalle->id);
+    //         }
+    //     }
+
+    //     // Mostrar balance y detalles en la vista para depurar
+    //     return view('empresa.balance_show', compact('empresa', 'balance'));
+    // }
+
     public function show($empresa_id)
     {
         // Verifica que la empresa pertenezca al usuario autenticado
@@ -85,16 +119,15 @@ class BalanceAperturaController extends Controller
                     ->with(['detalles.cuenta']) // Cargar la relación 'detalles' y 'cuenta' en una sola consulta
                     ->first();
 
-        // Verificar si la relación 'cuenta' está cargada correctamente
-        foreach ($balance->detalles as $detalle) {
-            if (!$detalle->relationLoaded('cuenta')) {
-                Log::error('Relación cuenta no cargada para detalle con id: ' . $detalle->id);
-            }
+        // Si no existe un balance de apertura, redirigir a la vista de crear balance
+        if (!$balance) {
+            return redirect()->route('balance.create', ['empresa_id' => $empresa->id]);
         }
 
-        // Mostrar balance y detalles en la vista para depurar
+        // Si el balance existe, mostrar la vista de balance
         return view('empresa.balance_show', compact('empresa', 'balance'));
     }
+
 
 
 

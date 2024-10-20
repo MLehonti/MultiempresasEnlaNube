@@ -30,4 +30,12 @@ class Empresa extends Model
      {
          return $this->hasMany(BalanceApertura::class);
      }
+
+     // Relación con PlanCuenta (una empresa tiene un plan de cuentas)
+    public function planCuenta()
+    {
+        return $this->hasOne(PlanCuenta::class);
+    }
+
+     
 }
