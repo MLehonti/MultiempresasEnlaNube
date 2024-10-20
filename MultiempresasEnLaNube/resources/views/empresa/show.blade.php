@@ -25,9 +25,9 @@
 
                     <!-- Botón para redirigir a la creación del balance de apertura -->
                     <div class="flex items-center justify-center mt-4">
-                        <a href="{{ route('balance.create', ['empresa_id' => $empresa->id]) }}">
+                        <a href="{{ route('plan-cuentas.create', ['empresa_id' => $empresa->id]) }}">
                             <x-button type="button" style="background-color: #38a169; color: white;">
-                                Crear Balance de Apertura
+                                Crear Plan de Cuentas
                             </x-button>
                         </a>
                     </div>

@@ -1,4 +1,3 @@
-{{-- resources/views/empresa/balance_create.blade.php --}}
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -6,7 +5,6 @@
         </h2>
     </x-slot>
 
-    <!-- Incluir la librería de SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <div class="py-12">
@@ -19,17 +17,36 @@
 
                     <h3 class="text-xl font-bold mb-4">Balance de Apertura</h3>
 
+                    @php
+                        $codigoTipoCuenta = [
+                            'activo_corriente' => 1,
+                            'activo_no_corriente' => 2,
+                            'pasivo_corriente' => 3,
+                            'pasivo_no_corriente' => 4,
+                            'patrimonio' => 5
+                        ];
+
+                        $contadores = [
+                            'activo_corriente' => 1,
+                            'activo_no_corriente' => 1,
+                            'pasivo_corriente' => 1,
+                            'pasivo_no_corriente' => 1,
+                            'patrimonio' => 1
+                        ];
+                    @endphp
+
                     <!-- Activos Corrientes -->
-                    <h4 class="text-lg font-semibold mt-6 mb-2">Activos Corrientes</h4>
+                    <h4 class="text-lg font-semibold mt-6 mb-2">1 Activos Corrientes</h4>
                     @foreach($cuentas as $cuenta)
                         @if($cuenta->tipo === 'activo_corriente')
+                            @php
+                                $codigo = $codigoTipoCuenta['activo_corriente'] . '.' . $contadores['activo_corriente'];
+                                $contadores['activo_corriente']++;
+                            @endphp
                             <div class="mb-4">
-                                <label for="cuenta_{{ $cuenta->id }}" class="block text-gray-700">{{ $cuenta->nombre }}</label>
+                                <label for="cuenta_{{ $cuenta->id }}" class="block text-gray-700">{{ $codigo }} {{ $cuenta->nombre }}</label>
                                 <div class="flex">
-                                    <!-- Campo oculto para enviar cuenta_id -->
                                     <input type="hidden" name="detalles[{{ $cuenta->id }}][cuenta_id]" value="{{ $cuenta->id }}">
-
-                                    <!-- Campos de Debe y Haber -->
                                     <input type="number" step="0.01" name="detalles[{{ $cuenta->id }}][debe]" placeholder="Debe" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
                                     <input type="number" step="0.01" name="detalles[{{ $cuenta->id }}][haber]" placeholder="Haber" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
@@ -38,16 +55,17 @@
                     @endforeach
 
                     <!-- Activos No Corrientes -->
-                    <h4 class="text-lg font-semibold mt-6 mb-2">Activos No Corrientes</h4>
+                    <h4 class="text-lg font-semibold mt-6 mb-2">2 Activos No Corrientes</h4>
                     @foreach($cuentas as $cuenta)
                         @if($cuenta->tipo === 'activo_no_corriente')
+                            @php
+                                $codigo = $codigoTipoCuenta['activo_no_corriente'] . '.' . $contadores['activo_no_corriente'];
+                                $contadores['activo_no_corriente']++;
+                            @endphp
                             <div class="mb-4">
-                                <label for="cuenta_{{ $cuenta->id }}" class="block text-gray-700">{{ $cuenta->nombre }}</label>
+                                <label for="cuenta_{{ $cuenta->id }}" class="block text-gray-700">{{ $codigo }} {{ $cuenta->nombre }}</label>
                                 <div class="flex">
-                                    <!-- Campo oculto para enviar cuenta_id -->
                                     <input type="hidden" name="detalles[{{ $cuenta->id }}][cuenta_id]" value="{{ $cuenta->id }}">
-
-                                    <!-- Campos de Debe y Haber -->
                                     <input type="number" step="0.01" name="detalles[{{ $cuenta->id }}][debe]" placeholder="Debe" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
                                     <input type="number" step="0.01" name="detalles[{{ $cuenta->id }}][haber]" placeholder="Haber" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
@@ -56,16 +74,17 @@
                     @endforeach
 
                     <!-- Pasivos Corrientes -->
-                    <h4 class="text-lg font-semibold mt-6 mb-2">Pasivos Corrientes</h4>
+                    <h4 class="text-lg font-semibold mt-6 mb-2">3 Pasivos Corrientes</h4>
                     @foreach($cuentas as $cuenta)
                         @if($cuenta->tipo === 'pasivo_corriente')
+                            @php
+                                $codigo = $codigoTipoCuenta['pasivo_corriente'] . '.' . $contadores['pasivo_corriente'];
+                                $contadores['pasivo_corriente']++;
+                            @endphp
                             <div class="mb-4">
-                                <label for="cuenta_{{ $cuenta->id }}" class="block text-gray-700">{{ $cuenta->nombre }}</label>
+                                <label for="cuenta_{{ $cuenta->id }}" class="block text-gray-700">{{ $codigo }} {{ $cuenta->nombre }}</label>
                                 <div class="flex">
-                                    <!-- Campo oculto para enviar cuenta_id -->
                                     <input type="hidden" name="detalles[{{ $cuenta->id }}][cuenta_id]" value="{{ $cuenta->id }}">
-
-                                    <!-- Campos de Debe y Haber -->
                                     <input type="number" step="0.01" name="detalles[{{ $cuenta->id }}][debe]" placeholder="Debe" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
                                     <input type="number" step="0.01" name="detalles[{{ $cuenta->id }}][haber]" placeholder="Haber" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
@@ -74,16 +93,17 @@
                     @endforeach
 
                     <!-- Pasivos No Corrientes -->
-                    <h4 class="text-lg font-semibold mt-6 mb-2">Pasivos No Corrientes</h4>
+                    <h4 class="text-lg font-semibold mt-6 mb-2">4 Pasivos No Corrientes</h4>
                     @foreach($cuentas as $cuenta)
                         @if($cuenta->tipo === 'pasivo_no_corriente')
+                            @php
+                                $codigo = $codigoTipoCuenta['pasivo_no_corriente'] . '.' . $contadores['pasivo_no_corriente'];
+                                $contadores['pasivo_no_corriente']++;
+                            @endphp
                             <div class="mb-4">
-                                <label for="cuenta_{{ $cuenta->id }}" class="block text-gray-700">{{ $cuenta->nombre }}</label>
+                                <label for="cuenta_{{ $cuenta->id }}" class="block text-gray-700">{{ $codigo }} {{ $cuenta->nombre }}</label>
                                 <div class="flex">
-                                    <!-- Campo oculto para enviar cuenta_id -->
                                     <input type="hidden" name="detalles[{{ $cuenta->id }}][cuenta_id]" value="{{ $cuenta->id }}">
-
-                                    <!-- Campos de Debe y Haber -->
                                     <input type="number" step="0.01" name="detalles[{{ $cuenta->id }}][debe]" placeholder="Debe" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
                                     <input type="number" step="0.01" name="detalles[{{ $cuenta->id }}][haber]" placeholder="Haber" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
@@ -92,16 +112,17 @@
                     @endforeach
 
                     <!-- Patrimonio -->
-                    <h4 class="text-lg font-semibold mt-6 mb-2">Patrimonio</h4>
+                    <h4 class="text-lg font-semibold mt-6 mb-2">5 Patrimonio</h4>
                     @foreach($cuentas as $cuenta)
                         @if($cuenta->tipo === 'patrimonio')
+                            @php
+                                $codigo = $codigoTipoCuenta['patrimonio'] . '.' . $contadores['patrimonio'];
+                                $contadores['patrimonio']++;
+                            @endphp
                             <div class="mb-4">
-                                <label for="cuenta_{{ $cuenta->id }}" class="block text-gray-700">{{ $cuenta->nombre }}</label>
+                                <label for="cuenta_{{ $cuenta->id }}" class="block text-gray-700">{{ $codigo }} {{ $cuenta->nombre }}</label>
                                 <div class="flex">
-                                    <!-- Campo oculto para enviar cuenta_id -->
                                     <input type="hidden" name="detalles[{{ $cuenta->id }}][cuenta_id]" value="{{ $cuenta->id }}">
-
-                                    <!-- Campos de Debe y Haber -->
                                     <input type="number" step="0.01" name="detalles[{{ $cuenta->id }}][debe]" placeholder="Debe" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
                                     <input type="number" step="0.01" name="detalles[{{ $cuenta->id }}][haber]" placeholder="Haber" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
@@ -144,8 +165,6 @@
                 }
             });
 
-            console.log('Data enviada:', JSON.stringify(data)); // Verificar datos enviados
-
             fetch('{{ route("balance.store") }}', {
                 method: 'POST',
                 headers: {
@@ -170,7 +189,6 @@
                 }
             })
             .catch(error => {
-                console.error('Error:', error);  // Verificar errores en la consola
                 Swal.fire('Error', 'Ocurrió un error al guardar el balance de apertura. Por favor, inténtalo de nuevo.', 'error');
             });
         });

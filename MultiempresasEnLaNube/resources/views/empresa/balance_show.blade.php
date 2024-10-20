@@ -1,4 +1,3 @@
-{{-- resources/views/empresa/balance_show.blade.php --}}
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center">
@@ -18,14 +17,56 @@
                         <table class="min-w-full bg-white border w-full">
                             <thead>
                                 <tr>
+                                    <th class="py-2 px-4 border text-left">Código</th>
                                     <th class="py-2 px-4 border text-left">Cuenta</th>
                                     <th class="py-2 px-4 border text-left">Debe</th>
                                     <th class="py-2 px-4 border text-left">Haber</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $codigoTipoCuenta = [
+                                        'activo_corriente' => 1,
+                                        'activo_no_corriente' => 2,
+                                        'pasivo_corriente' => 3,
+                                        'pasivo_no_corriente' => 4,
+                                        'patrimonio' => 5
+                                    ];
+
+                                    $nombresTipoCuenta = [
+                                        'activo_corriente' => 'Activos Corrientes',
+                                        'activo_no_corriente' => 'Activos No Corrientes',
+                                        'pasivo_corriente' => 'Pasivos Corrientes',
+                                        'pasivo_no_corriente' => 'Pasivos No Corrientes',
+                                        'patrimonio' => 'Patrimonio'
+                                    ];
+
+                                    $contadores = [
+                                        'activo_corriente' => 1,
+                                        'activo_no_corriente' => 1,
+                                        'pasivo_corriente' => 1,
+                                        'pasivo_no_corriente' => 1,
+                                        'patrimonio' => 1
+                                    ];
+
+                                    $tipoCuentaActual = null;
+                                @endphp
+
                                 @foreach($balance->detalles as $detalle)
+                                    @php
+                                        $tipoCuenta = $detalle->cuenta->tipo;
+                                        $codigo = $codigoTipoCuenta[$tipoCuenta] . '.' . $contadores[$tipoCuenta];
+
+                                        // Verificar si estamos cambiando de tipo de cuenta (ej. de Activos Corrientes a Pasivos Corrientes)
+                                        if ($tipoCuenta !== $tipoCuentaActual) {
+                                            $tipoCuentaActual = $tipoCuenta;
+                                            echo "<tr><td colspan='4' class='font-bold py-2 px-4 border'>{$codigoTipoCuenta[$tipoCuenta]}. {$nombresTipoCuenta[$tipoCuenta]}</td></tr>";
+                                        }
+
+                                        $contadores[$tipoCuenta]++;
+                                    @endphp
                                     <tr>
+                                        <td class="py-2 px-4 border text-left">{{ $codigo }}</td>
                                         <td class="py-2 px-4 border text-left">{{ $detalle->cuenta->nombre }}</td>
                                         <td class="py-2 px-4 border text-left">{{ number_format($detalle->debe, 2) }}</td>
                                         <td class="py-2 px-4 border text-left">{{ number_format($detalle->haber, 2) }}</td>
