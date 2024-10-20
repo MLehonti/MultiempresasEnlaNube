@@ -23,7 +23,7 @@ class BalanceApertura extends Model
     // Relaciones
     public function empresa()
     {
-        return $this->belongsTo(Empresa::class);
+        return $this->belongsTo(empresa::class);
     }
 
     public function detalles()

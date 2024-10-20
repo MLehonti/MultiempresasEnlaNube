@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 
 class UserController extends Controller
 {
     // Obtener todos los usuarios en formato JSON
-   // UserController.php
     public function index(Request $request)
     {
         // Obtener todos los usuarios
@@ -22,7 +23,6 @@ class UserController extends Controller
         // Si no es una solicitud AJAX, retornar la vista
         return view('users.index', compact('users'));
     }
-
 
     // Obtener un usuario específico en formato JSON
     public function show($id)
@@ -61,7 +61,19 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+
+        // Guardar temporalmente los datos del usuario antes de eliminarlo
+        $userId = $user->id;
+        $userName = $user->name;  // Usar 'name' en lugar de 'nombre', según tu modelo User
+
+        // Eliminar el usuario
         $user->delete();
+
+        // Registrar la actividad usando el usuario autenticado
+        activity()
+            ->causedBy(Auth::user()) // Usuario autenticado que está realizando la acción
+            ->performedOn($user) // El modelo que fue eliminado
+            ->log('Se eliminó un usuario: ' . $userId . ' nombre: ' . $userName);
 
         return response()->json([
             'success' => true,

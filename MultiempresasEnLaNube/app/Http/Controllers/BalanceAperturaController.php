@@ -24,12 +24,13 @@ class BalanceAperturaController extends Controller
         $cuentas = Cuenta::all();
         return view('empresa.balance_create', compact('empresa', 'cuentas'));
     }
- 
+
 
 
     public function store(Request $request)
     {
         try {
+            $user = Auth::user();
             // Verificar los datos recibidos
             Log::info('Datos recibidos en la solicitud: ' . json_encode($request->all()));
 
@@ -49,6 +50,15 @@ class BalanceAperturaController extends Controller
                 'empresa_id' => $request->empresa_id,
                 'fecha' => now(),
             ]);
+            //Registrar el balance de apertura creado
+            $empresa = $balance->empresa;
+
+
+
+            activity()
+            ->causedBy($user) // Obtener el usuario autenticado correctamente
+            ->performedOn($balance) // Especificar el objeto (empresa) en el que se realizó la acción
+            ->log('Se creó una nuevo balance : ' . $balance->id . ' de la empresa: ' . $empresa->nombre);
 
             Log::info('Balance de apertura creado: ' . $balance->id);
 

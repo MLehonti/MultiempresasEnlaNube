@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\BalanceAperturaController;
+use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PlanCuentasController;
@@ -62,6 +63,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/plan-cuentas', [PlanCuentasController::class, 'index'])->name('plan-cuentas.index');
     Route::get('/plan-cuentas/create', [PlanCuentasController::class, 'create'])->name('plan-cuentas.create');
     Route::post('/plan-cuentas/store', [PlanCuentasController::class, 'store'])->name('plan-cuentas.store');
+
+    //Rutas de la bitacora
+    Route::resource('bitacora', BitacoraController::class);
 });
 
 require __DIR__.'/auth.php';

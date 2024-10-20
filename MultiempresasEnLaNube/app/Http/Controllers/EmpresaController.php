@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Rubro;
 use App\Models\Empresa;
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class EmpresaController extends Controller
 {
@@ -18,7 +19,7 @@ class EmpresaController extends Controller
      {
          // Obtener todas las empresas del sistema
          $empresas = Empresa::with('rubro', 'user')->get();
- 
+
          // Retornar la vista con las empresas
          return view('empresa.index', compact('empresas'));
      }
@@ -44,6 +45,7 @@ class EmpresaController extends Controller
 
     public function store(Request $request)
     {
+
         try {
             $user = Auth::user();
             $empresaExistente = Empresa::where('user_id', $user->id)->first();
@@ -65,6 +67,10 @@ class EmpresaController extends Controller
                 'rubro_id' => $request->rubro_id,
                 'user_id' => $user->id,
             ]);
+            activity()
+    ->causedBy($user) // Obtener el usuario autenticado correctamente
+    ->performedOn($empresa) // Especificar el objeto (empresa) en el que se realizó la acción
+    ->log('Se creó una nueva empresa: ' . $empresa->id . ' nombre: ' . $empresa->nombre);
 
             return response()->json([
                 'success' => true,
@@ -79,6 +85,7 @@ class EmpresaController extends Controller
                 'message' => 'Error al crear la empresa: ' . $e->getMessage()
             ], 500);
         }
+
     }
 
     public function show(Empresa $empresa)
@@ -94,6 +101,8 @@ class EmpresaController extends Controller
     public function destroy(Empresa $empresa)
     {
         try {
+            $user = Auth::user();
+
             if (Auth::user()->id !== $empresa->user_id) {
                 return response()->json([
                     'success' => false,
@@ -103,6 +112,11 @@ class EmpresaController extends Controller
 
             // Eliminar la empresa y todos los datos relacionados (si aplica)
             $empresa->delete();
+            //Registrar la empresa eliminada
+            activity()
+            ->causedBy($user) // Obtener el usuario autenticado correctamente
+            ->performedOn($empresa) // Especificar el objeto (empresa) en el que se realizó la acción
+            ->log('Se elimino la empresa empresa: ' . $empresa->id . ' nombre: ' . $empresa->nombre);
 
             return response()->json([
                 'success' => true,

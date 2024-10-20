@@ -23,6 +23,7 @@
                         {{ __('Crear Empresa') }}
                     </x-nav-link>
 
+
                     <!-- Mostrar enlace a Recursos solo si existe una empresa asociada al usuario -->
                     @php
                         $empresa = Auth::user()->empresa;
@@ -34,6 +35,10 @@
                             {{ __('Recursos') }}
                         </x-nav-link>
                     @endif
+                    
+                    <x-nav-link :href="route('bitacora.index')" :active="request()->routeIs('bitacora.index')">
+                        {{ __('Bitacora') }}
+                    </x-nav-link>
                 </div>
             </div>
 
