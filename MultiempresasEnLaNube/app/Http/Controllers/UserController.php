@@ -6,10 +6,59 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
+use Barryvdh\DomPDF\Facade\Pdf;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class UserController extends Controller
 {
+
+    public function exportPdf()
+    {
+        // Obtener todos los usuarios de la base de datos
+        $users = User::all();
+
+        // Generar el PDF usando una vista
+        $pdf = PDF::loadView('users.pdf', compact('users'));
+
+        // Descargar el PDF generado
+        return $pdf->download('lista_usuarios.pdf');
+    }
+
+    // Nueva función para exportar a Excel
+    public function exportExcel()
+    {
+        // Crear un nuevo documento de Excel
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Agregar encabezados
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Nombre');
+        $sheet->setCellValue('C1', 'Email');
+
+        // Obtener todos los usuarios y agregarlos al archivo Excel
+        $users = User::all();
+        $row = 2; // Comienza desde la fila 2 para los datos
+        foreach ($users as $user) {
+            $sheet->setCellValue('A' . $row, $user->id);
+            $sheet->setCellValue('B' . $row, $user->name);
+            $sheet->setCellValue('C' . $row, $user->email);
+            $row++;
+        }
+
+        // Crear el archivo Excel y descargarlo
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'lista_usuarios.xlsx';
+        $temp_file = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($temp_file);
+
+        return response()->download($temp_file, $fileName);
+    }
+
+
     // Obtener todos los usuarios en formato JSON
+    // UserController.php
     public function index(Request $request)
     {
         // Obtener todos los usuarios
