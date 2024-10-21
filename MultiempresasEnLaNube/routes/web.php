@@ -25,6 +25,13 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
+Route::get('/plan-cuentas/export/excel', [PlanCuentasController::class, 'exportExcel'])->name('plan-cuentas.export.excel');
+
+
+Route::get('/plan-cuentas/export-pdf', [PlanCuentasController::class, 'exportPdf'])->name('plan-cuentas.export.pdf');
+
+
+
 // ruta  para exportar pdf de usuario
 Route::get('/users/export-pdf', [UserController::class, 'exportPdf'])->name('users.export.pdf');
 
