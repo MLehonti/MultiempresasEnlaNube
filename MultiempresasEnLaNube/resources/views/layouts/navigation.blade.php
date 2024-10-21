@@ -9,7 +9,7 @@
                         <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
                     </a>
                 </div>
-
+                
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex items-center"> <!-- Añadido items-center -->
                     <!-- Enlace a Dashboard -->
@@ -20,6 +20,11 @@
                     <!-- Enlace a Crear Empresa -->
                     <x-nav-link :href="route('empresa.create')" :active="request()->routeIs('empresa.create')">
                         {{ __('Crear Empresa') }}
+                    </x-nav-link>
+
+                    <!-- Enlace a Backups -->
+                    <x-nav-link :href="route('backups.index')" :active="request()->routeIs('backups.index')">
+                        {{ __('Backups') }}
                     </x-nav-link>
 
                     <!-- Mostrar el submenú de Recursos si existe una empresa asociada al usuario -->

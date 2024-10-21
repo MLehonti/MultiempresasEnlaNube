@@ -11,6 +11,7 @@ use App\Http\Controllers\PlanCuentasController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CuentaController;
+use App\Http\Controllers\BackupController;      //controlador del backup
 
 
 Route::get('/', function () {
@@ -98,6 +99,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/cuentas/{id}', [CuentaController::class, 'update'])->name('cuentas.update');
     Route::get('/cuentas/{id}', [CuentaController::class, 'show']);
     Route::delete('/cuentas/{id}', [CuentaController::class, 'destroy'])->name('cuentas.destroy');
+
+    // Rutas para la gestión de backups
+    // Ruta para mostrar la lista de backups
+    Route::get('/backups', [BackupController::class, 'index'])->name('backups.index');
+    // Ruta para descargar un backup
+    Route::get('/backups/download/{backup}', [BackupController::class, 'download'])->name('backups.download');
+    // Ruta para eliminar un backup
+    Route::delete('/backups/delete/{backup}', [BackupController::class, 'delete'])->name('backups.delete');
 });
 
 
